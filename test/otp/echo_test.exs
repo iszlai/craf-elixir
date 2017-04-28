@@ -17,5 +17,14 @@ test "echo" do
 
  Echo.send(pid, 2)
  assert_receive 2
- end
+ 
+ send(pid, :another_msg )
+ assert Process.alive?(pid)
+end
+
+test "times out after 50ms" do
+    {:ok, pid} = Echo.start_link()
+    Process.sleep(51)
+    refute Process.alive?(pid)
+end
 end
