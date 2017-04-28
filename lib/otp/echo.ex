@@ -1,6 +1,7 @@
 defmodule OTP.Echo do
  
     def start_link do
+        #m ,f a (module function argument)
         pid = spawn_link(__MODULE__, :loop, [])
         {:ok, pid}
     end
@@ -9,11 +10,11 @@ defmodule OTP.Echo do
         Kernel.send(pid, {msg, self()})
     end
     
-    def loop do
+    def loop do #zero arity (number of args)
         receive do
-        {msg, caller} when is_pid(caller) ->
+        {msg, caller}  ->
         Kernel.send(caller, msg)
-        loop()
+        loop()#levrages effective recursion
         end
     end
 
