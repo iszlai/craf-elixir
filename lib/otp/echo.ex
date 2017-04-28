@@ -2,11 +2,21 @@ defmodule OTP.Echo do
  @receive_timeout 50 #miliseconds
     def start_link do
         #m ,f a (module function argument)
+        #or
+        #anonymus func
+        #foo= fn() -> ...
         pid = spawn_link(__MODULE__, :loop, [])
         {:ok, pid}
     end
     
-    def send(pid, msg) do
+    def sync_send(pid, msg) do
+        async_send(pid,msg)
+        receive do
+            msg -> msg
+        end
+    end
+    
+    def async_send(pid, msg) do
         Kernel.send(pid, {msg, self()})
     end
     

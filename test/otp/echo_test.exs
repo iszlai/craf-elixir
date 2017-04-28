@@ -9,13 +9,13 @@ test "echo" do
  {:ok, pid} = Echo.start_link() #assume echo module
  #returns touple , ok -simbol , pid - will be assigned 
 
- Echo.send(pid, :hello)
+ Echo.async_send(pid, :hello)
  assert_receive :hello
  
- Echo.send(pid, :hi)
+ Echo.async_send(pid, :hi)
  assert_receive :hi
 
- Echo.send(pid, 2)
+ Echo.async_send(pid, 2)
  assert_receive 2
  
  send(pid, :another_msg )
@@ -27,4 +27,10 @@ test "times out after 50ms" do
     Process.sleep(51)
     refute Process.alive?(pid)
 end
+
+test "sync echo" do
+    {:ok,pid} = Echo.start_link()
+    assert :hello = Echo.sync_send(pid, :hello)
+end
+
 end
